@@ -18,7 +18,7 @@ body {
 
 h1 {
   background-color: #8b5e3c;
-  color: white;
+  color: rgb(255, 255, 255);
   padding: 15px;
   border-radius: 10px;
 }
@@ -31,10 +31,12 @@ a {
   padding: 10px 15px;
   border-radius: 5px;
   margin: 15px 0;
+  font-weight: bold;
 }
 
 a:hover {
   background-color: #6b4128;
+  color: #e7e2e0;
 }
 
 ul {
@@ -44,8 +46,8 @@ ul {
 }
 
 li {
-  background-color: #fff;
-  padding: 15px;
+  background-color: #ad9370cf;
+  padding: 0px;
   margin: 10px 0;
   border-radius: 5px;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
@@ -58,11 +60,11 @@ li a {
 }
 
 li a:hover {
-  color: #6b4128;
+  color: #e7e2e0;
 }
 
 li:hover {
-  background-color: #f0e5d8;
+  background-color: #d2b48c;
   cursor: pointer;
 }
 
