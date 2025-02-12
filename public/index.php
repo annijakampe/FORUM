@@ -23,7 +23,7 @@ if (empty($topics)) {
         <h1>Forum</h1>
 
 
-        <a href="../includes/new_topic.php">Create New Topic</a>
+        <a href="../includes/new_topic.php">Would You Like to Create a New Topic?</a>
 
         <?php if (!empty($message)): ?>
 
