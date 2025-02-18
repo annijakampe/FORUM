@@ -17,8 +17,8 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <head>
     <title><?= htmlspecialchars($topic['title']) ?></title>
-    <!-- <link rel="stylesheet" href="../assets/topic.css"> -->
-    <link rel="stylesheet" href="http://localhost/L/forum_sql/assets/topic.css">
+    <link rel="stylesheet" href="../assets/topic.css">
+    <!-- <link rel="stylesheet" href="http://localhost/L/PROJEKTI/forum_sql/assets/topic.css"> -->
 
 
 </head>
@@ -36,7 +36,6 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <input type="hidden" name="topic_id" value="<?= $topic_id ?>">
         <textarea name="content" required></textarea><br>
         <button type="submit">Post Reply</button>
-        <!-- "Back to Home" button -->
         <a href="../public/index.php" class="btn btn-primary">Back to Home</a>
 
     </form>

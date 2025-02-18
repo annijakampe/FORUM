@@ -18,7 +18,7 @@ h1 {
 }
 
 form {
-  width: 60%; /* Slightly increased form width for better appearance */
+  width: 60%;
   background-color: #d2b48c;
   padding: 30px;
   border-radius: 10px;
@@ -26,11 +26,11 @@ form {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Added shadow for a more defined look */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 input[type="text"] {
-  width: 100%; /* Set input to 100% of the form's width */
+  width: 100%;
   padding: 12px;
   border: 1px solid #8b5e3c;
   border-radius: 5px;
@@ -45,8 +45,8 @@ button {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  width: 100%; /* Make the button stretch across the form */
-  margin-bottom: 10px; /* Space between button and back link */
+  width: 100%;
+  margin-bottom: 10px;
   font-size: 18px;
   display: block;
 }
