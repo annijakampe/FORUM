@@ -18,8 +18,6 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <title><?= htmlspecialchars($topic['title']) ?></title>
     <link rel="stylesheet" href="../assets/topic.css">
-    <!-- <link rel="stylesheet" href="http://localhost/L/PROJEKTI/forum_sql/assets/topic.css"> -->
-
 
 </head>
 
