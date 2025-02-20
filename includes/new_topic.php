@@ -1,20 +1,22 @@
-<!DOCTYPE html>
-<html>
+<?php
+session_start();
+include '../database/db.php';
 
-<head>
-    <title>Create Topic</title>
-    <link rel="stylesheet" href="../assets/new_topic.css">
-</head>
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+    $topic_id = $_POST['topic_id'];
+    $content = $_POST['content'];
 
-<body>
-    <h1>Create New Topic</h1>
-    <form action="../includes/api.php?action=new_topic" method="POST">
-        <input type="text" name="title" required placeholder="Enter topic title"
-            onfocus="this.placeholder = ''"
-            onblur="this.placeholder = 'Enter topic title'"><br>
-        <button type="submit">Create Topic</button>
-        <a href="../public/index.php" class="btn btn-primary">Back to Home</a>
-    </form>
-</body>
+    $stmt = $conn->prepare("INSERT INTO comments (user_id, topic_id, content) VALUES (?, ?, ?)");
+    $stmt->bind_param("iis", $user_id, $topic_id, $content);
 
-</html>
+    if ($stmt->execute()) {
+        echo "Comment posted successfully!";
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+
+    $stmt->close();
+}
+
+header("Location: ../public/index.php");

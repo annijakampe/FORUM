@@ -1,46 +1,72 @@
 <?php
-require '../database/db.php';
+session_start();
+include '../database/db.php';
 
-$stmt = $pdo->query("SELECT * FROM topics ORDER BY created_at DESC");
-$topics = $stmt->fetchAll(PDO::FETCH_ASSOC);
-if (empty($topics)) {
-    $message = "No topics found.";
-}
+$is_guest = !isset($_SESSION['user_id']);
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forum</title>
-    <link rel="stylesheet" href="../assets/indexx.css">
 </head>
 
 <body>
-    <div class="container">
-        <h1>Forum</h1>
+    <h1>Welcome to the Forum</h1>
+    <?php if ($is_guest): ?>
+        <p>You are viewing as a guest. Please <a href="../includes/login.php">login</a> or <a href="../includes/register.php">register</a> to post comments or topics.</p>
+    <?php else: ?>
+        <p>Welcome, user! You can <a href="../includes/logout.php">logout</a> here.</p>
+    <?php endif; ?>
 
+    <h2>Topics</h2>
+    <?php
+    $result = $conn->query("SELECT * FROM topics");
+    while ($topic = $result->fetch_assoc()) {
+        echo "<div>";
+        echo "<h3>" . $topic['title'] . "</h3>";
+        echo "<p>" . $topic['content'] . "</p>";
 
-        <a href="../includes/new_topic.php">Would You Like to Create a New Topic?</a>
+        // Fetch comments for each topic
+        $stmt = $conn->prepare("SELECT * FROM comments WHERE topic_id = ?");
+        if ($stmt === false) {
+            die("Prepare failed: " . htmlspecialchars($conn->error));
+        }
 
-        <?php if (!empty($message)): ?>
+        $bind = $stmt->bind_param("i", $topic['id']);
+        if ($bind === false) {
+            die("Bind failed: " . htmlspecialchars($stmt->error));
+        }
 
-            <p><?= htmlspecialchars($message) ?></p>
-        <?php else: ?>
+        $execute = $stmt->execute();
+        if ($execute === false) {
+            die("Execute failed: " . htmlspecialchars($stmt->error));
+        }
 
-            <ul>
-                <?php foreach ($topics as $topic): ?>
-                    <li>
-                        <a href="../includes/topic.php?id=<?= $topic['id'] ?>">
-                            <?= htmlspecialchars($topic['title']) ?>
-                        </a>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        <?php endif; ?>
-    </div>
+        $comments = $stmt->get_result();
+        while ($comment = $comments->fetch_assoc()) {
+            echo "<div>";
+            echo "<p>" . $comment['content'] . "</p>";
+            if (!$is_guest && $comment['user_id'] == $_SESSION['user_id']) {
+                echo "<a href='../includes/delete_comment.php?id=" . $comment['id'] . "'>Delete</a>";
+            }
+            echo "</div>";
+        }
+        $stmt->close();
+
+        if (!$is_guest) {
+            echo "<form method='post' action='../includes/post_comment.php'>";
+            echo "<input type='hidden' name='topic_id' value='" . $topic['id'] . "'>";
+            echo "<textarea name='content'></textarea><br>";
+            echo "<input type='submit' value='Post Comment'>";
+            echo "</form>";
+        }
+
+        echo "</div>";
+    }
+    $conn->close();
+    ?>
 </body>
 
 </html>
