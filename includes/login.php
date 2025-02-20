@@ -1,39 +1,29 @@
 <?php
 session_start();
-include '../database/db.php';
+include '../database/db.php'; // Ensure this includes the PDO connection
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $stmt = $conn->prepare("SELECT id, password FROM users WHERE username = ?");
-    if ($stmt === false) {
-        die("Prepare failed: " . htmlspecialchars($conn->error));
+    try {
+        // Prepare the SQL statement using PDO
+        $stmt = $pdo->prepare("SELECT id, password FROM users WHERE username = ?");
+        $stmt->execute([$username]);
+
+        // Fetch the result
+        $user = $stmt->fetch();
+
+        if ($user && password_verify($password, $user['password'])) {
+            $_SESSION['user_id'] = $user['id'];
+            header("Location: ../public/index.php");
+            exit();
+        } else {
+            echo "Invalid username or password.";
+        }
+    } catch (PDOException $e) {
+        die("Error: " . $e->getMessage());
     }
-
-    $bind = $stmt->bind_param("s", $username);
-    if ($bind === false) {
-        die("Bind failed: " . htmlspecialchars($stmt->error));
-    }
-
-    $execute = $stmt->execute();
-    if ($execute === false) {
-        die("Execute failed: " . htmlspecialchars($stmt->error));
-    }
-
-    $stmt->store_result();
-    $stmt->bind_result($id, $hashed_password);
-    $stmt->fetch();
-
-    if (password_verify($password, $hashed_password)) {
-        $_SESSION['user_id'] = $id;
-        header("Location: ../public/index.php");
-        exit();
-    } else {
-        echo "Invalid username or password.";
-    }
-
-    $stmt->close();
 }
 ?>
 
