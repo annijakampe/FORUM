@@ -1,17 +1,17 @@
 <?php
 session_start();
-include '../database/db.php'; // Ensure this includes the PDO connection
+include '../database/db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
     try {
-        // Prepare the SQL statement using PDO
+
         $stmt = $pdo->prepare("SELECT id, password FROM users WHERE username = ?");
         $stmt->execute([$username]);
 
-        // Fetch the result
+
         $user = $stmt->fetch();
 
         if ($user && password_verify($password, $user['password'])) {
@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
-
+<link rel="stylesheet" href="../assets/log_reg.css?t=123">
 <form method="post" action="../includes/login.php">
     Username: <input type="text" name="username" required><br>
     Password: <input type="password" name="password" required><br>

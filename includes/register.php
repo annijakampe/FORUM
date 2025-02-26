@@ -12,19 +12,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
 
     try {
-        // Prepare the INSERT statement
+
         $stmt = $pdo->prepare("INSERT INTO users (username, password, email) VALUES (?, ?, ?)");
 
-        // Execute the statement with the provided values
+
         $stmt->execute([$username, $password, $email]);
 
-        echo "Registration successful!";
+        echo "Registration successful!</br>";
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
 }
 ?>
-
+<link rel="stylesheet" href="../assets/log_reg.css?t=123">
 <form method="post" action="../includes/register.php">
     Username: <input type="text" name="username" required><br>
     Password: <input type="password" name="password" required><br>

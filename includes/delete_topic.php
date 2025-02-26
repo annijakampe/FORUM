@@ -2,7 +2,7 @@
 session_start();
 require '../database/db.php';
 
-// Check if user is logged in
+
 if (!isset($_SESSION['user_id'])) {
     die("Unauthorized access.");
 }
