@@ -10,6 +10,11 @@ if (!isset($_GET['id'])) {
     header("Location: ../public/index.php");
     exit;
 }
+include '../includes/fetch_comments.php';
+if (isset($_GET['id'])) {
+    $topic_id = $_GET['id'];
+    include '../includes/fetch_topic.php'; // Fetch single topic details
+}
 
 $topic_id = $_GET['id'];
 

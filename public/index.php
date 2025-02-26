@@ -1,6 +1,7 @@
 <?php
 session_start();
 include '../database/db.php';
+include '../includes/fetch_topics.php';
 
 $is_guest = !isset($_SESSION['user_id']);
 ?>
@@ -10,6 +11,7 @@ $is_guest = !isset($_SESSION['user_id']);
 
 <head>
     <title>Forum</title>
+    <!-- <link rel="stylesheet" href="../assets/indexx.css"> -->
 </head>
 
 <body>
@@ -32,12 +34,13 @@ $is_guest = !isset($_SESSION['user_id']);
     <h2>Topics</h2>
     <?php
     try {
-        // Fetch topics from the database using PDO
-        $stmt = $pdo->query("SELECT * FROM topics ORDER BY created_at DESC");
+        // Fetch topics with user names from the database using PDO
+        $stmt = $pdo->query("SELECT topics.*, users.username FROM topics JOIN users ON topics.user_id = users.id ORDER BY topics.created_at DESC");
 
         while ($topic = $stmt->fetch()) {
-            echo "<div>";
+            echo "<div class='topic'>";
             echo "<h3>" . htmlspecialchars($topic['title']) . "</h3>";
+            echo "<p>by " . htmlspecialchars($topic['username'])  . "</p>";
 
             // Check if the logged-in user is the creator of the topic
             if (!$is_guest && $topic['user_id'] == $_SESSION['user_id']) {
@@ -48,11 +51,12 @@ $is_guest = !isset($_SESSION['user_id']);
                 echo "</form><br>";
             }
 
-            // Fetch comments for each topic
-            $stmt_comments = $pdo->prepare("SELECT * FROM comments WHERE topic_id = ?");
+            // Fetch comments for each topic with user names
+            $stmt_comments = $pdo->prepare("SELECT comments.*, users.username FROM comments JOIN users ON comments.user_id = users.id WHERE comments.topic_id = ? ORDER BY comments.created_at ASC");
             $stmt_comments->execute([$topic['id']]);
             while ($comment = $stmt_comments->fetch()) {
-                echo "<div>";
+                echo "<div class='comment'>";
+                echo "<p>by " . htmlspecialchars($comment['username']) . "</p>";
                 echo "<p>" . htmlspecialchars($comment['content']) . "</p>";
                 if (!$is_guest && $comment['user_id'] == $_SESSION['user_id']) {
                     echo "<a href='../includes/delete_comment.php?id=" . $comment['id'] . "'>Delete</a>";

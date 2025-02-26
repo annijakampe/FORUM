@@ -1,0 +1,18 @@
+<?php
+include '../database/db.php';
+
+if (isset($_GET['topic_id'])) {
+    $topic_id = $_GET['topic_id'];
+
+    try {
+        // Fetch comments with user names
+        $stmt = $pdo->prepare("SELECT comments.*, users.username FROM comments JOIN users ON comments.user_id = users.id WHERE comments.topic_id = ? ORDER BY comments.created_at ASC");
+        $stmt->execute([$topic_id]);
+        $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+
+    // Return comments as JSON (if needed) or prepare for rendering in HTML
+    // echo json_encode($comments);
+}

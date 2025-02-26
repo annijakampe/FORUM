@@ -1,28 +1,14 @@
 <?php
-$api_url = "http://localhost/api.php?action=fetch_topics";
+include '../database/db.php';
 
-$ch = curl_init($api_url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-$response = curl_exec($ch);
-curl_close($ch);
+try {
+    // Fetch topics with user names
+    $stmt = $pdo->prepare("SELECT topics.*, users.username FROM topics JOIN users ON topics.user_id = users.id ORDER BY topics.created_at DESC");
+    $stmt->execute();
+    $topics = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
+}
 
-$topics = json_decode($response, true);
-?>
-
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>Fetched Topics</title>
-</head>
-
-<body>
-    <h1>Fetched Topics from API</h1>
-    <ul>
-        <?php foreach ($topics as $topic): ?>
-            <li><?= htmlspecialchars($topic['title']) ?></li>
-        <?php endforeach; ?>
-    </ul>
-</body>
-
-</html>
+// Return topics as JSON (if needed) or prepare for rendering in HTML
+// echo json_encode($topics);
