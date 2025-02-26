@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo->beginTransaction();
 
         // Delete replies first (to avoid foreign key issues)
-        $deleteReplies = $pdo->prepare("DELETE FROM replies WHERE topic_id = ?");
+        $deleteReplies = $pdo->prepare("DELETE FROM comments WHERE topic_id = ?");
         $deleteReplies->execute([$topic_id]);
 
         // Delete the topic
