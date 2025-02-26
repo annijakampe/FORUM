@@ -20,15 +20,17 @@ h2 {
 }
 
 h3 {
-  color: #1e1e1e;
-  font-size: 1.4em;
-  background-color: #888888;
+  color: #ffffff;
+  font-size: 1.7em;
+  background-color: #1e1e1e;
   padding: 10px;
   border-radius: 5px;
+  border: 1px solid #1e1e1e;
+  text-align: center;
 }
 
 p {
-  color: #000000;
+  color: #ffffff;
   font-size: 1em;
 }
 
@@ -39,6 +41,8 @@ a {
   border-radius: 5px;
   text-decoration: none;
   margin: 5px;
+  background-color: #1e1e1e;
+  border: 1px solid #b6b5b5;
 }
 
 a:hover {
@@ -50,8 +54,16 @@ form {
   background-color: transparent;
   padding: 20px;
   display: inline-block;
-  /* margin: 20px; */
-  text-align: left;
+  text-align: center;
+}
+
+input[type="text"],
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
 
 input[type="submit"] {
@@ -66,26 +78,36 @@ input[type="submit"] {
 
 input[type="submit"]:hover {
   background-color: #45a049;
+  width: 100%;
 }
 
-.topic,
+.topic {
+  background-color: #1e1e1e2b;
+  padding: 10px;
+  margin: 40px 0;
+  border-radius: 5px;
+  border: 3px solid #1e1e1e;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
 .comment {
   background-color: #1e1e1e2b;
   padding: 10px;
-  margin: 20px 0;
+  margin: 40px 0;
   border-radius: 5px;
+  border: 1px solid #1e1e1e;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: left;
+  text-align: center;
 }
 
 .topic:hover,
 .comment:hover {
-  background-color: #858181;
+  background-color: #343434ee;
   cursor: pointer;
 }
 
 .comment a {
-  color: #ffffff;
+  color: #c7c7c7;
   font-weight: bold;
   text-decoration: none;
 }
