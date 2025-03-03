@@ -2,52 +2,54 @@
 session_start();
 require '../database/db.php';
 
-
+//Pārbauda vai lietotājs ir ielogojies
 if (!isset($_SESSION['user_id'])) {
     die("Unauthorized access.");
 }
 
+// Pārbauda, vai pieprasījums ir ar POST metodi
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Validate topic_id input to ensure it's a valid integer
+
+    //  Pārbauda, vai tēmai ir derīgs ID
     if (isset($_POST['topic_id']) && filter_var($_POST['topic_id'], FILTER_VALIDATE_INT)) {
         $topic_id = $_POST['topic_id'];
     } else {
         die("Invalid topic ID.");
     }
 
-    // Fetch the topic to check ownership
+    // Pārbauda, vai lietotājs ir tēmas īpašnieks
     try {
         $stmt = $pdo->prepare("SELECT user_id FROM topics WHERE id = ?");
         $stmt->execute([$topic_id]);
         $topic = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Check if topic exists and user is the owner
+
         if (!$topic || $topic['user_id'] !== $_SESSION['user_id']) {
             die("Unauthorized action.");
         }
 
-        // Begin a transaction
+        // Sāk transakciju, lai nodrošinātu drošu dzēšanu
         $pdo->beginTransaction();
 
-        // Delete replies first (to avoid foreign key issues)
+        // Izdzēš visus komentārus, kas saistīti ar tēmu
         $deleteReplies = $pdo->prepare("DELETE FROM comments WHERE topic_id = ?");
         $deleteReplies->execute([$topic_id]);
 
-        // Delete the topic
+        // Izdzēš pašu tēmu
         $deleteTopic = $pdo->prepare("DELETE FROM topics WHERE id = ?");
         $deleteTopic->execute([$topic_id]);
 
-        // Commit the transaction
+        // Apstiprina izmaiņas
         $pdo->commit();
 
-        // Redirect back to forum index
+
         header("Location: ../public/index.php");
         exit;
     } catch (Exception $e) {
-        // Rollback the transaction if an error occurs
+
         $pdo->rollBack();
         die("An error occurred while deleting the topic: " . $e->getMessage());
     }
 } else {
-    die("Invalid request method.");
+    die("Invalid request method."); // Ja pieprasījums nav ar POST, pārtrauc skriptu
 }

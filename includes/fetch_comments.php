@@ -1,6 +1,7 @@
 <?php
 include '../database/db.php';
 
+// iegūst comments un lietotājvārdu datus no db
 if (isset($_GET['topic_id'])) {
     $topic_id = $_GET['topic_id'];
 

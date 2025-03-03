@@ -1,6 +1,6 @@
 <?php
-
 // Savienojums ar datubāzi
+
 $servername = "localhost";
 $username = "root";
 $password = "";
